@@ -3,11 +3,18 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 import { useNavigation } from 'expo-router';
+import {useRoute} from '@react-navigation/native'
 
+interface RouteParams{
+  machineName:string
+}
 
 const Breakdownfinish: React.FC = () => {
 
   const navigation = useNavigation();
+
+  const route = useRoute();
+  const { machineName } = route.params as RouteParams;
 
   const handleGoBack = () => {
     navigation.goBack()
@@ -29,7 +36,7 @@ const Breakdownfinish: React.FC = () => {
 
     <View className='items-center '>
         <Text className='text-xl font-bold text-black'>
-          Machine 1
+          {machineName}
         </Text>
       </View>
     

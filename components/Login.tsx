@@ -23,11 +23,11 @@ const Login: React.FC = (props) => {
   };
 
   const handleLogin = () => {
-    if (!phone || !password) {
-      alert('Please enter both email and password.');
-      return;
-    }
-    else if(phone == "0702481632" && password == "admin")
+    // if (!phone || !password) {
+    //   alert('Please enter both email and password.');
+    //   return;
+    // }
+    // else if(phone == "0702481632" && password == "admin")
     navigation.navigate('MaintenanceCriteria');
   };
 

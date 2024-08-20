@@ -4,26 +4,32 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Picker } from '@react-native-picker/picker'; 
 import React, { useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
-
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types'; 
+
 type StartfixingScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Startfixing'>;
 
-import Startfixing  from '../components/Startfixing';
+interface RouteParams {
+  machineName: string;
+}
 
 const Reportbreakdown: React.FC = () => {
-
   const navigation = useNavigation<StartfixingScreenNavigationProp>();
+  const route = useRoute();
+  const { machineName } = route.params as RouteParams; // Get machineName from params
+
   const handleStartfixing = () => {
-    navigation.navigate('Startfixing')
+    navigation.navigate('Startfixing', {machineName: machineName});
   };
+
   const handleGoBack = () => {
-    navigation.goBack()
+    navigation.goBack();
   };
   
   const [selectedScale, setSelectedScale] = useState("");
   const [selectedImpact, setSelectedImpact] = useState("");
+
   return (
     <View className='flex-1 p-4 bg-white'>
       
@@ -38,14 +44,12 @@ const Reportbreakdown: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      
       <View className='items-center'>
-        <Text className='text-xl font-bold text-black'>
-          Machine 1
+        <Text className='text-2xl font-bold text-black'>
+          {machineName}
         </Text>
       </View>
     
-      
       <View className='items-center flex-1 mt-10'>
         <TouchableOpacity className='px-20 py-2 rounded-full bg-green-950'>
           <Text className='text-lg font-bold text-center text-white'>
@@ -54,13 +58,12 @@ const Reportbreakdown: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      
       <View className='w-full mb-8'>
         <Text className='mb-2 text-gray-600'>Scale of the breakdown</Text>
         <View className='border border-gray-300 rounded-lg'>
           <Picker
             selectedValue={selectedScale}
-            onValueChange={(itemValue) => setSelectedImpact(itemValue)}
+            onValueChange={(itemValue) => setSelectedScale(itemValue)}
             className='p-2'
           >
             <Picker.Item label="High" value="high" />
@@ -83,7 +86,6 @@ const Reportbreakdown: React.FC = () => {
         </View>
       </View>
 
-      
       <View className='p-4 mb-10 border-2 border-gray-300 rounded-lg'>
         <Text className='mb-2 text-gray-500'>Briefly describe the nature of the breakdown</Text>
         <TextInput
@@ -91,20 +93,16 @@ const Reportbreakdown: React.FC = () => {
           className='text-gray-700'
         />
         <TouchableOpacity className='absolute right-3 top-3'>
-        <Entypo name="circle-with-cross" size={24} color="black" />
+          <Entypo name="circle-with-cross" size={24} color="black" />
         </TouchableOpacity>
       </View>
 
-     
       <TouchableOpacity className='flex-row items-center justify-between mt-10 mb-16 ml-5 mr-3' onPress={handleStartfixing}>
-      
-        <View className='px-14  py-3 bg-[#bf111a] rounded-3xl'>
+        <View className='px-14 py-3 bg-[#bf111a] rounded-3xl'>
           <Text className='text-lg font-bold text-white'>
             Report Breakdown
           </Text>  
         </View>  
-
-        
         <View className='ml-0'>
           <MaterialIcons name="keyboard-double-arrow-right" size={80} color="#bf111a"  />  
         </View>
