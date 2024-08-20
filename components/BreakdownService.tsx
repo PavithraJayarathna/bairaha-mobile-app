@@ -4,22 +4,25 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types'; 
-import { useState, useEffect } from 'react';
 
 type ReportbreakdownScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Reportbreakdown'>;
 
+interface RouteParams {
+  machineName: string;
+}
+
 const BreakdownService: React.FC = () => {
   const navigation = useNavigation<ReportbreakdownScreenNavigationProp>();
+  const route = useRoute();
+  const {machineName } = route.params as RouteParams; // Get machineName from params
 
   const handleReportbreakdown = () => {
-    navigation.navigate("Reportbreakdown");
+    navigation.navigate('Reportbreakdown', {machineName: machineName });
   };
 
   const handleGoBack = () => {
     navigation.goBack();
   };
-
-
 
   return (
     <View className='flex-1 p-4 bg-white'>
@@ -34,9 +37,9 @@ const BreakdownService: React.FC = () => {
         </TouchableOpacity>
       </View>  
 
-      <View className='items-center'>
+      <View className='items-center mb-4'>
         <Text className='text-2xl font-bold text-black'>
-          
+          {machineName}
         </Text>
       </View>
 

@@ -5,6 +5,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
@@ -14,48 +15,57 @@ import axios from "axios";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types"; // Adjust the path as needed
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Camera } from 'expo-camera';
+
 type MachinProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   "MachinProfile"
 >;
-import MachinProfile from "../components/MachinProfile";
 
-
+interface Machine {
+  _id: string;
+  machinename: string;
+}
 
 const MachineList: React.FC = () => {
   const navigation = useNavigation<MachinProfileScreenNavigationProp>();
   
   const handleMachinProfile = (id: string) => {
-    navigation.navigate("MachinProfile", { machineId: id });
-  };
+    navigation.navigate("MachinProfile", { machineId: id });
+  };
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-
-
-  const [machines, setMachines] = useState([]);
-  const [machine, setMachine] = useState([]);
-  
-
-
+  const [machines, setMachines] = useState<Machine[]>([]);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const fetchMachines = async () => {
       try {
         const response = await axios.get(
-          "https://bairaha-app-api.vercel.app/api/machine/get-machines "
+          "https://bairaha-app-api.vercel.app/api/machine/get-machines"
         );
-        
         setMachines(response.data.machines);
       } catch (error) {
         console.error("Error fetching machines:", error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched
       }
     };
 
     fetchMachines();
   }, []);
+
+  if (loading) {
+    return (
+      <View className="items-center justify-center flex-1 bg-white">
+        <ActivityIndicator size="large" color="#bf111a" />
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 p-4 bg-white">
@@ -122,4 +132,3 @@ const MachineList: React.FC = () => {
 };
 
 export default MachineList;
-
