@@ -14,6 +14,7 @@ import Fixingstatus from '../components/Fixingstatus';
 import Machinefixed from '../components/Machinefixed';
 import SectorSelection from '../components/SectorSelection';
 import Sign from '../components/Sign';
+import BarcodeScannerScreen from '../components/BarcodeScannerScreen';
 
 
 const index = () => {
@@ -34,6 +35,7 @@ const index = () => {
         <Stack.Screen name="Machinefixed" component={Machinefixed} options={{ headerShown: false }} />
         <Stack.Screen name="SectorSelection" component={SectorSelection} options={{ headerShown: false }} />
         <Stack.Screen name="Sign" component={Sign} options={{ headerShown: false }} />
+        <Stack.Screen name="BarcodeScannerScreen" component={BarcodeScannerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

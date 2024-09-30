@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../types';
 
+type SignScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Sign'>;
 
 const Sign: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isRememberMe, setIsRememberMe] = useState(false);
   const [hidePassword, setHidePassword] = useState<boolean>(true);
+
+  const navigation = useNavigation<SignScreenNavigationProp>();
 
   const toggleCheckbox = () => {
     setIsRememberMe(!isRememberMe);
@@ -23,7 +29,7 @@ const Sign: React.FC = () => {
         </TouchableOpacity>
       </View>
       
-      <Text  className='mt-8 mb-2 text-lg'>Email</Text>
+      <Text className='mt-8 mb-2 text-lg'>Email</Text>
       <TextInput
         className='px-4 py-2 mb-4 border rounded border-[#0d6000]'
         placeholder="Email"
@@ -52,7 +58,7 @@ const Sign: React.FC = () => {
           className={`h-6 w-6 border-2 rounded ${isRememberMe ? 'bg-[#0d6000]' : 'bg-white'} border-gray-300`}
         >
           {isRememberMe && (
-           <FontAwesomeIcon icon={faCheck} size={20} color="#fff" />
+            <FontAwesomeIcon icon={faCheck} size={20} color="#fff" />
           )}
         </TouchableOpacity>
         <Text className='ml-2 text-sm text-gray-700'>Remember me</Text>
@@ -63,8 +69,8 @@ const Sign: React.FC = () => {
       </TouchableOpacity>
 
       <View className='flex-row justify-center mt-6'>
-        <Text className='text-sm text-gray-700'>Don't have an account? </Text>
-        <TouchableOpacity>
+        <Text className='text-sm text-gray-700'>Already have an account? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text className='text-sm text-[#bf111a] font-bold'>Log In</Text>
         </TouchableOpacity>
       </View>

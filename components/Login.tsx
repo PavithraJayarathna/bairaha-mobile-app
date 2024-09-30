@@ -4,13 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../types'; 
+import { RootStackParamList } from '../types';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
-const Login: React.FC = (props) => {
-
-  
+const Login: React.FC = () => {
   const [phone, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isRememberMe, setIsRememberMe] = useState(false);
@@ -23,17 +21,11 @@ const Login: React.FC = (props) => {
   };
 
   const handleLogin = () => {
-    if (!phone || !password) {
-      alert('Please enter both email and password.');
-      return;
-    }
-    else if(phone == "0702481632" && password == "admin")
     navigation.navigate('MaintenanceCriteria');
   };
 
   return (
     <SafeAreaView className='justify-center flex-1 px-6 ml-2 mr-2 bg-white'>
-      
       <View className='flex-row items-center justify-between mb-4'>
         <Text className='text-2xl font-extrabold'>Log In</Text>
         <TouchableOpacity>
@@ -81,13 +73,12 @@ const Login: React.FC = (props) => {
       <TouchableOpacity 
         className='py-3 rounded-full bg-[#bf111a] mt-28'
         onPress={handleLogin}
-        
       >
         <Text className='text-lg font-bold text-center text-white'>Log In</Text>
       </TouchableOpacity>
       <View className='flex-row justify-center mt-6'>
         <Text className='text-sm text-gray-700'>Don't have an account? </Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Sign')}>
           <Text className='text-sm text-[#bf111a] font-bold'>Sign Up</Text>
         </TouchableOpacity>
       </View>
@@ -96,6 +87,7 @@ const Login: React.FC = (props) => {
 };
 
 export default Login;
+
 
 
 

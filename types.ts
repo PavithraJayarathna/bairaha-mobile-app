@@ -3,15 +3,16 @@ export type RootStackParamList = {
   Login: undefined;
   MaintenanceCriteria: undefined;
   MachineList: undefined;
-  BreakdownService: undefined;
-  Fixingstatus: undefined;
-  Machinefixed: undefined;
-  Reportbreakdown: undefined;
-  Breakdownfinish: undefined;
+  BreakdownService: {machineId: string, machineName: string};
+  Fixingstatus: {machineName: string};
+  Machinefixed: {machineName: string};
+  Reportbreakdown: {machineName: string};
+  Breakdownfinish: {machineName: string};
   
   Sign: undefined;
-  Startfixing: undefined;
-  MachinProfile: { machineId: string };
+  Startfixing: {machineName: string};
+  MachinProfile: { machineId: string};
+  BarcodeScannerScreen: undefined; 
 
   
 };

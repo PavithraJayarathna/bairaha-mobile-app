@@ -15,7 +15,7 @@ const Homepage = (props: any) => {
     
     const timer = setTimeout(() => {
       navigation.navigate('Login'); 
-    }, 300);
+    }, 600);
 
     
     return () => clearTimeout(timer);
