@@ -40,7 +40,7 @@ const MachineList: React.FC = () => {
   };
 
   const [machines, setMachines] = useState<Machine[]>([]);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchMachines = async () => {
@@ -52,7 +52,7 @@ const MachineList: React.FC = () => {
       } catch (error) {
         console.error("Error fetching machines:", error);
       } finally {
-        setLoading(false); // Set loading to false after data is fetched
+        setLoading(false); 
       }
     };
 

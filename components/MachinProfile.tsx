@@ -8,6 +8,9 @@ import { RootStackParamList } from '../types';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import BreakdownService from '../components/BreakdownService';
 
+import BarcodeScannerScreen from './BarcodeScannerScreen';
+
+
 type BreakdownServiceScreenNavigationProp = StackNavigationProp<RootStackParamList, 'BreakdownService'>;
 
 interface Machine {
@@ -30,6 +33,7 @@ const MachinProfile: React.FC = () => {
   
   const [machine, setMachine] = useState<Machine | null>(null);
 
+
   useEffect(() => {
     const fetchMachines = async () => {
       try {
@@ -37,6 +41,7 @@ const MachinProfile: React.FC = () => {
         const data = await res.json();
         const foundMachine = data.machines.find((proj: Machine) => proj._id === machineId);
         setMachine(foundMachine || null);
+
       } catch (error) {
         console.error("Error fetching machine:", error);
       }
@@ -51,6 +56,7 @@ const MachinProfile: React.FC = () => {
   };
 
   const handleGoBack = () => {
+    
     navigation.goBack();
   };
 
