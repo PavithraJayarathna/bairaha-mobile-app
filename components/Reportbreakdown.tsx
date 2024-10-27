@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Picker } from '@react-native-picker/picker'; 
@@ -6,7 +6,8 @@ import React, { useState } from 'react';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../types'; 
+import { RootStackParamList } from '../types';
+import axios from 'axios';
 
 type StartfixingScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Startfixing'>;
 
@@ -26,16 +27,57 @@ const Reportbreakdown: React.FC = () => {
   const handleGoBack = () => {
     navigation.goBack();
   };
+  
   const handleOpenScanner = () => {
     navigation.navigate('BarcodeScannerScreen');
   };
-  
+
   const [selectedScale, setSelectedScale] = useState("");
   const [selectedImpact, setSelectedImpact] = useState("");
+  const [description, setDescription] = useState("");
+
+  // console.log(selectedScale);
+
+  const reportData = {
+    status:'',
+    machineName:'',
+    scaleofBreakdown: selectedScale,
+    impactofBreakdown: selectedImpact,
+    description: description,
+    breakdownInformedBy:'',
+    timeReported: new Date().toISOString(),
+    participantsToFixed:'',
+    usedMaterials:'',
+    maintenanceInformedBy:'',
+    specialNote:'',
+    timeFixed:'',
+    approval:'',
+    timeApproved:'',
+    approvedSupervisor:'',
+    supervisorNotes:'',
+  };
+
+  const handleReportBreakdown = async () => {
+    
+    try {
+      const response = await axios.post('https://bairaha-app-api.vercel.app/api/machine/report-breakdown', reportData);
+      console.log(reportData);
+      Alert.alert('Success', 'Breakdown reported successfully!');
+    } catch (error) {
+      console.error("Error reporting breakdown:", error);
+      Alert.alert('Error', 'There was an error reporting the breakdown. Please try again.');
+    }
+  };
+
+  const handleReportAndStartFixing = async () => {
+    await handleReportBreakdown();
+    handleStartfixing();
+  };
+
+  
 
   return (
     <View className='flex-1 p-4 bg-white'>
-      
       <View className='flex-row items-center justify-between mb-4 ml-3 mr-3'>
         <TouchableOpacity onPress={handleGoBack}>
           <FontAwesome6 name="arrow-left-long" size={24} color="black" />
@@ -48,11 +90,9 @@ const Reportbreakdown: React.FC = () => {
       </View>
 
       <View className='items-center'>
-        <Text className='text-2xl font-bold text-black'>
-          {machineName}
-        </Text>
+        <Text className='text-2xl font-bold text-black'>{machineName}</Text>
       </View>
-    
+
       <View className='items-center flex-1 mt-10'>
         <TouchableOpacity className='px-20 py-2 rounded-full bg-green-950'>
           <Text className='text-lg font-bold text-center text-white'>
@@ -66,7 +106,7 @@ const Reportbreakdown: React.FC = () => {
         <View className='border border-gray-300 rounded-lg'>
           <Picker
             selectedValue={selectedScale}
-            onValueChange={(itemValue) => setSelectedScale(itemValue)}
+            onValueChange={(value) => setSelectedScale(value)}
             className='p-2'
           >
             <Picker.Item label="High" value="high" />
@@ -74,13 +114,13 @@ const Reportbreakdown: React.FC = () => {
           </Picker>
         </View>
       </View>
-      
+
       <View className='w-full mb-10'>
         <Text className='mb-2 text-gray-600'>Impact of breakdown on production</Text>
         <View className='border border-gray-300 rounded-lg'>
           <Picker
             selectedValue={selectedImpact}
-            onValueChange={(itemValue) => setSelectedImpact(itemValue)}
+            onValueChange={(value) => setSelectedImpact(value)}
             className='p-2'
           >
             <Picker.Item label="High" value="high" />
@@ -93,26 +133,29 @@ const Reportbreakdown: React.FC = () => {
         <Text className='mb-2 text-gray-500'>Briefly describe the nature of the breakdown</Text>
         <TextInput
           placeholder="Description"
+          value={description}
+          onChangeText={setDescription}
           className='text-gray-700'
+          multiline
         />
-        <TouchableOpacity className='absolute right-3 top-3'>
+        <TouchableOpacity className='absolute right-3 top-3' onPress={() => setDescription('')}>
           <Entypo name="circle-with-cross" size={24} color="black" />
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity className='flex-row items-center justify-between mt-10 mb-8 ml-0 mr-0' onPress={handleStartfixing}>
+      <TouchableOpacity className='flex-row items-center justify-between mt-10 mb-8 ml-0 mr-0' onPress={handleReportAndStartFixing}>
         <View className='px-8 py-3 bg-[#bf111a] rounded-3xl'>
-          <Text className='text-xl font-bold text-white'style={{letterSpacing:2}}>
+          <Text className='text-xl font-bold text-white' style={{letterSpacing: 2}}>
             REPORT BREAKDOWN
           </Text>  
         </View>  
         <View className='ml-0'>
-          <MaterialIcons name="keyboard-double-arrow-right" size={80} color="#bf111a"  />  
+          <MaterialIcons name="keyboard-double-arrow-right" size={80} color="#bf111a" />
         </View>
       </TouchableOpacity>
-      
     </View>
   );
 };
 
 export default Reportbreakdown;
+

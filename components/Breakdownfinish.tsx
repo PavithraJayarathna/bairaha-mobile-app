@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
-import { useNavigation } from 'expo-router'; // This is specific to expo-router
+import { useNavigation } from 'expo-router'; 
 import { useRoute } from '@react-navigation/native';
 
 interface RouteParams {
@@ -18,9 +18,9 @@ const Breakdownfinish: React.FC = () => {
     navigation.goBack();
   };
 
-  // Ensure 'BarcodeScannerScreen' is properly defined in your router
+  
   const handleOpenScanner = () => {
-    navigation.navigate('BarcodeScannerScreen' as never); // explicitly casting to avoid typing issues
+    navigation.navigate('BarcodeScannerScreen' as never); 
   };
 
   return (
@@ -35,6 +35,7 @@ const Breakdownfinish: React.FC = () => {
           </View>
         </TouchableOpacity>
       </View>
+      
 
       <View className="items-center">
         <Text className="text-xl font-bold text-black">{machineName}</Text>

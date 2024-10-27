@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 
 import Login  from '../components/Login';
 
-import { RootStackParamList } from '../types'; // Adjust the path as necessary
+import { RootStackParamList } from '../types'; 
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 
