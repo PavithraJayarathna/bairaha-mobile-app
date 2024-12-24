@@ -8,16 +8,17 @@ import { RootStackParamList } from '../types';
 type ReportbreakdownScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Reportbreakdown'>;
 
 interface RouteParams {
+  machineId: string;
   machineName: string;
 }
 
 const BreakdownService: React.FC = () => {
   const navigation = useNavigation<ReportbreakdownScreenNavigationProp>();
   const route = useRoute();
-  const {machineName } = route.params as RouteParams; // Get machineName from params
+  const { machineId, machineName } = route.params as RouteParams; // Get machineId and machineName from params
 
   const handleReportbreakdown = () => {
-    navigation.navigate('Reportbreakdown', {machineName: machineName });
+    navigation.navigate('Reportbreakdown', { machineId, machineName });
   };
 
   const handleGoBack = () => {

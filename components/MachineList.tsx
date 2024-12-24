@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -76,6 +77,8 @@ const MachineList: React.FC = () => {
         <TouchableOpacity onPress={handleGoBack}>
           <FontAwesome6 name="arrow-left-long" size={24} color="black" />
         </TouchableOpacity>
+
+        
         <TouchableOpacity onPress={handleOpenScanner}>
           <View>
             <MaterialIcons name="qr-code-scanner" size={45} color="black" />
