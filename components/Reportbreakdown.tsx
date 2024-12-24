@@ -12,16 +12,17 @@ import axios from 'axios';
 type StartfixingScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Startfixing'>;
 
 interface RouteParams {
+  machineId: string;
   machineName: string;
 }
 
 const Reportbreakdown: React.FC = () => {
   const navigation = useNavigation<StartfixingScreenNavigationProp>();
   const route = useRoute();
-  const { machineName } = route.params as RouteParams; // Get machineName from params
+  const { machineId, machineName } = route.params as RouteParams; // Get machineName from params
 
   const handleStartfixing = () => {
-    navigation.navigate('Startfixing', {machineName: machineName});
+    navigation.navigate('Startfixing', {machineId, machineName});
   };
 
   const handleGoBack = () => {
@@ -39,22 +40,23 @@ const Reportbreakdown: React.FC = () => {
   // console.log(selectedScale);
 
   const reportData = {
-    status:'',
-    machineName:'',
+    status: 'Breakdown',
+    machinename: machineName, //this
     scaleofBreakdown: selectedScale,
     impactofBreakdown: selectedImpact,
     description: description,
-    breakdownInformedBy:'',
+    breakdownInformedBy:'user 02',
     timeReported: new Date().toISOString(),
     participantsToFixed:'',
     usedMaterials:'',
     maintenanceInformedBy:'',
     specialNote:'',
-    timeFixed:'',
+    timeFixed:'pending',
     approval:'',
-    timeApproved:'',
+    timeApproved:'pending',
     approvedSupervisor:'',
     supervisorNotes:'',
+    fixingStartTime: 'pending',
   };
 
   const handleReportBreakdown = async () => {
