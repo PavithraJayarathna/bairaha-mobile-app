@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
+import {useSelector} from 'react-redux';
 import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Fontisto from '@expo/vector-icons/Fontisto';
 
-
 const SectorSelection = () => {
+  const { currentUser } = useSelector((state:any) => state.user);
 
-  
   return (
     <View className='flex-1 p-4 bg-white'>
-      
+
       <View className='flex-row items-center justify-between mb-4 ml-3 mr-3'>
         <View style={{ flex: 1 }} />
         <TouchableOpacity>
           <View>
-            <MaterialIcons name="qr-code-scanner" size={45} color="black" />
+            <Text className='text-xl font-bold'>{currentUser.fullname}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -72,10 +72,11 @@ const SectorSelection = () => {
             </View>
           </TouchableOpacity>
         </View>
-        
+
       </View>
     </View>
   );
 };
 
 export default SectorSelection;
+

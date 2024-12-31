@@ -15,9 +15,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import axios from "axios";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../types"; // Adjust the path as needed
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import { Camera } from 'expo-camera';
+import { RootStackParamList } from "../types";
 
 type MachinProfileScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -31,7 +29,7 @@ interface Machine {
 
 const MachineList: React.FC = () => {
   const navigation = useNavigation<MachinProfileScreenNavigationProp>();
-  
+
   const handleMachinProfile = (id: string) => {
     navigation.navigate("MachinProfile", { machineId: id });
   };
@@ -41,7 +39,8 @@ const MachineList: React.FC = () => {
   };
 
   const [machines, setMachines] = useState<Machine[]>([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState<string>(""); // State for search query
 
   useEffect(() => {
     const fetchMachines = async () => {
@@ -53,12 +52,17 @@ const MachineList: React.FC = () => {
       } catch (error) {
         console.error("Error fetching machines:", error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
     fetchMachines();
   }, []);
+
+  // Filter machines based on search query
+  const filteredMachines = machines.filter((machine) =>
+    machine.machinename.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -67,18 +71,18 @@ const MachineList: React.FC = () => {
       </View>
     );
   }
+
   const handleOpenScanner = () => {
     navigation.navigate('BarcodeScannerScreen');
   };
+
   return (
     <View className="flex-1 p-4 bg-white">
-      {/* Header with back button and QR code */}
       <View className="flex-row items-center justify-between mb-4 ml-3 mr-3">
         <TouchableOpacity onPress={handleGoBack}>
           <FontAwesome6 name="arrow-left-long" size={24} color="black" />
         </TouchableOpacity>
 
-        
         <TouchableOpacity onPress={handleOpenScanner}>
           <View>
             <MaterialIcons name="qr-code-scanner" size={45} color="black" />
@@ -94,18 +98,23 @@ const MachineList: React.FC = () => {
           color="black"
           style={{ marginRight: 10 }}
         />
-        <TextInput className="flex-1 text-lg" placeholder="Search" />
+        <TextInput
+          className="flex-1 text-lg"
+          placeholder="Search"
+          value={searchQuery} // Bind the input value to the state
+          onChangeText={(text) => setSearchQuery(text)} // Update the search query on input change
+        />
       </View>
 
-      {/* Machine list */}
+      {/* Scrollable machine list */}
       <ScrollView>
-        {machines.map((machine) => (
+        {filteredMachines.map((machine) => (
           <TouchableOpacity
             key={machine._id}
             className="flex-row items-center justify-between mb-2 ml-2"
             onPress={() => handleMachinProfile(machine._id)}
           >
-            <View className="w-full px-28 py-7 mt-5 bg-[#bf111a] rounded-2xl pl-10">
+            <View className="w-full px-28 py-7 mt-2 bg-[#bf111a] rounded-2xl pl-10">
               <Text className="text-lg font-bold text-white">
                 {machine.machinename}
               </Text>
@@ -114,23 +123,8 @@ const MachineList: React.FC = () => {
         ))}
       </ScrollView>
 
-      <View className="flex-row justify-center mt-10 mb-10">
-        <TouchableOpacity>
-          <AntDesign name="downcircleo" size={55} color="#bf111a" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Bottom icons */}
-      <View className="flex-row justify-around">
-        <TouchableOpacity>
-          <FontAwesome6 name="add" size={45} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <AntDesign name="delete" size={45} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <MaterialIcons name="edit" size={45} color="black" />
-        </TouchableOpacity>
+      <View className="mt-2">
+        <Text className="text-center text-sm text-gray-500">— Scroll down for more —</Text>
       </View>
     </View>
   );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -12,6 +13,9 @@ type MachineListScreenNavigationProp = StackNavigationProp<RootStackParamList, '
 const MaintenanceCriteria: React.FC = () => {
   const navigation = useNavigation<MachineListScreenNavigationProp>();
 
+  // Access currentUser from the Redux store
+  const { currentUser } = useSelector((state: any) => state.user);
+
   const handleMachineList = () => {
     navigation.navigate('MachineList');
   };
@@ -20,17 +24,14 @@ const MaintenanceCriteria: React.FC = () => {
     navigation.goBack();
   };
 
-  const handleOpenScanner = () => {
-    navigation.navigate('BarcodeScannerScreen');
-  };
-
   return (
     <View className="flex-1 p-4 bg-white">
       <View className="flex-row items-center justify-between mb-4 ml-3 mr-3">
         <View style={{ flex: 1 }} />
-        <TouchableOpacity onPress={handleOpenScanner}>
+        <TouchableOpacity>
           <View>
-            <MaterialIcons name="qr-code-scanner" size={45} color="black" />
+            {/* Replace QR code with user.fullname */}
+            <Text className="text-xl font-bold">{currentUser?.fullname}</Text>
           </View>
         </TouchableOpacity>
       </View>

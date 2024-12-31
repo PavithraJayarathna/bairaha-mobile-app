@@ -6,10 +6,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types'; 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import BreakdownService from '../components/BreakdownService';
-
-import BarcodeScannerScreen from './BarcodeScannerScreen';
-
 
 type BreakdownServiceScreenNavigationProp = StackNavigationProp<RootStackParamList, 'BreakdownService'>;
 
@@ -30,9 +26,8 @@ const MachinProfile: React.FC = () => {
   const navigation = useNavigation<BreakdownServiceScreenNavigationProp>();
   const route = useRoute();
   const { machineId, machineName } = route.params as { machineId: string, machineName: string };
-  
-  const [machine, setMachine] = useState<Machine | null>(null);
 
+  const [machine, setMachine] = useState<Machine | null>(null);
 
   useEffect(() => {
     const fetchMachines = async () => {
@@ -41,7 +36,6 @@ const MachinProfile: React.FC = () => {
         const data = await res.json();
         const foundMachine = data.machines.find((proj: Machine) => proj._id === machineId);
         setMachine(foundMachine || null);
-
       } catch (error) {
         console.error("Error fetching machine:", error);
       }
@@ -56,7 +50,6 @@ const MachinProfile: React.FC = () => {
   };
 
   const handleGoBack = () => {
-    
     navigation.goBack();
   };
 
@@ -67,9 +60,11 @@ const MachinProfile: React.FC = () => {
       </View>
     );
   }
+
   const handleOpenScanner = () => {
     navigation.navigate('BarcodeScannerScreen');
   };
+
   return (
     <View className='flex-1 p-4 bg-white'>
       <View className='flex-row items-center justify-between mb-4 ml-3 mr-3'>
@@ -95,44 +90,64 @@ const MachinProfile: React.FC = () => {
         </View>
       </View>
 
-      <View className="flex-1 mt-6 ml-5 space-y-2">
-        <Text className="text-base">
-          <Text className="font-bold">Id:</Text> {machine._id}
-        </Text>
-        <Text className="text-base">
-          <Text className="font-bold">Machine Name:</Text> {machine.machinename}
-        </Text>
-        <Text className="text-base">
-          <Text className="font-bold">Model Number:</Text> {machine.modelnumber}
-        </Text>
-        <Text className="text-base">
-          <Text className="font-bold">Serial Number:</Text> {machine.serialnumber}
-        </Text>
-        <Text className="text-base">
-          <Text className="font-bold">Brand:</Text> {machine.brand}
-        </Text>
-        <Text className="text-base">
-          <Text className="font-bold">Status:</Text> {machine.status}
-        </Text>
-        <Text className="text-base">
-          <Text className="font-bold">Power:</Text> {machine.power}
-        </Text>
-        <Text className="text-base">
-          <Text className="font-bold">Voltage:</Text> {machine.voltage}
-        </Text>
-        <Text className="text-base">
-          <Text className="font-bold">Operator:</Text> {machine.operator}
-        </Text>
-        <Text className="text-base">
-          <Text className="font-bold">Special Notes:</Text> {machine.specialnotes}
-        </Text>
+      {/* Machine details with slightly increased font size */}
+      <View className="flex-1 mt-6 ml-5 space-y-3">
+        <View className="flex-row justify-between">
+          <Text className="font-bold text-lg">Machine Name:</Text>
+          <Text className="text-base">{machine.machinename}</Text>
+        </View>
+        <View className="flex-row justify-between">
+          <Text className="font-bold text-lg">Model Number:</Text>
+          <Text className="text-base">{machine.modelnumber}</Text>
+        </View>
+        {/* <View className="flex-row justify-between">
+          <Text className="font-bold text-lg">Serial Number:</Text>
+          <Text className="text-base">{machine.serialnumber}</Text>
+        </View> */}
+        <View className="flex-row justify-between">
+          <Text className="font-bold text-lg">Brand:</Text>
+          <Text className="text-base">{machine.brand}</Text>
+        </View>
+        <View className="flex-row justify-between">
+          <Text className="font-bold text-lg">Status:</Text>
+          <Text className="text-base">{machine.status}</Text>
+        </View>
+        <View className="flex-row justify-between">
+          <Text className="font-bold text-lg">Power:</Text>
+          <Text className="text-base">{machine.power}</Text>
+        </View>
+        <View className="flex-row justify-between">
+          <Text className="font-bold text-lg">Voltage:</Text>
+          <Text className="text-base">{machine.voltage}</Text>
+        </View>
+        <View className="flex-row justify-between">
+          <Text className="font-bold text-lg">Operator:</Text>
+          <Text className="text-base">{machine.operator}</Text>
+        </View>
+        <View className="flex-row justify-between">
+          <Text className="font-bold text-lg">Special Notes:</Text>
+          <Text className="text-base">{machine.specialnotes}</Text>
+        </View>
       </View>
 
-      <View className="items-center justify-end flex-1">
+      <View className="items-center justify-end flex-1 mb-3">
         <TouchableOpacity onPress={handleBreakdownService}>
-        <MaterialCommunityIcons name="arrow-right-bold-circle-outline" size={75} color="#0d6000" />
+          <View
+            style={{
+              backgroundColor: '#bf111a',
+              padding: 2,
+              paddingRight: 25, 
+              paddingLeft: 25,               
+              borderRadius: 20,
+              borderWidth: 2,
+              borderColor: '#ffffff',
+            }}
+          >
+            <MaterialCommunityIcons name="hammer-wrench" size={60} color="white" />
+          </View>
         </TouchableOpacity>
       </View>
+
     </View>
   );
 };
