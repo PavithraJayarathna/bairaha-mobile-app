@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, Alert, BackHandler } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 import { signInFailure, signInSuccess, signInStart } from '../assets/redux/user/userSlice';
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
@@ -27,7 +26,6 @@ const Login: React.FC = () => {
 
   const handleLogin = async () => {
     
-    navigation.navigate('MaintenanceCriteria'); // This should be remove
     if (!phonenumber || !password) {
       return dispatch(signInFailure('Please fill all the fields'));
     }
@@ -40,23 +38,36 @@ const Login: React.FC = () => {
         { headers: { 'Content-Type': 'application/json' } }
       );
 
-      console.log(response.status >= 200 && response.status < 300);
-
       if (response.status >= 200 && response.status < 300) {
         dispatch(signInSuccess(response.data));
         navigation.navigate('MaintenanceCriteria');
-
       } else {
         dispatch(signInFailure(response.data.message || 'Login failed'));
         Alert.alert('Login Failed', response.data.message || 'Invalid credentials.');
       }
-      
     } catch (error: any) {
       const errMessage = error.response?.data?.message || error.message || 'An error occurred';
       dispatch(signInFailure(errMessage));
       Alert.alert('Login Failed', errMessage);
     }
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const backAction = () => {
+        Alert.alert('Hold on!', 'Are you sure you want to exit the app?', [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Exit', onPress: () => BackHandler.exitApp() },
+        ]);
+        return true; // Prevent default back action
+      };
+
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+      // Cleanup the listener when leaving the page
+      return () => backHandler.remove();
+    }, [])
+  );
 
   return (
     <SafeAreaView className="justify-center flex-1 px-6 ml-2 mr-2 bg-white">
