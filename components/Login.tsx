@@ -26,6 +26,8 @@ const Login: React.FC = () => {
   };
 
   const handleLogin = async () => {
+    
+    navigation.navigate('MaintenanceCriteria'); // This should be remove
     if (!phonenumber || !password) {
       return dispatch(signInFailure('Please fill all the fields'));
     }

@@ -83,19 +83,14 @@ const Reportbreakdown: React.FC = () => {
 
   return (
     <View className='flex-1 p-4 bg-white'>
-      <View className='flex-row items-center justify-between mb-4 ml-3 mr-3'>
-        <TouchableOpacity onPress={handleGoBack}>
+      <View className="flex-row items-center justify-between mb-4">
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesome6 name="arrow-left-long" size={24} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleOpenScanner}>
-          <View>
-            <MaterialIcons name="qr-code-scanner" size={45} color="black" />
-          </View>
+        <Text className="text-xl font-bold">{machineName}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('BarcodeScannerScreen')}>
+          <MaterialIcons name="qr-code-scanner" size={35} color="black" />
         </TouchableOpacity>
-      </View>
-
-      <View className='items-center'>
-        <Text className='text-2xl font-bold text-black'>{machineName}</Text>
       </View>
 
       <View className='items-center flex-2 mt-8 mb-8 py-2 rounded-full bg-[#0d6000]'>

@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  FlatList,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import axios from 'axios';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../types'; 
-import Machinefixed from '../components/Machinefixed';
+import { RootStackParamList } from '../types';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type MachinefixedScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Machinefixed'>;
 
@@ -20,6 +28,12 @@ interface BreakdownDetails {
   description: string;
   timeReported: string;
   fixingStartTime: string;
+  breakdownInformedBy: string;
+}
+
+interface User {
+  id: string;
+  name: string;
 }
 
 const Fixingstatus: React.FC = () => {
@@ -29,6 +43,9 @@ const Fixingstatus: React.FC = () => {
 
   const [breakdownDetails, setBreakdownDetails] = useState<BreakdownDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<User[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedParticipants, setSelectedParticipants] = useState<User[]>([]);
 
   useEffect(() => {
     const fetchBreakdownDetails = async () => {
@@ -48,20 +65,32 @@ const Fixingstatus: React.FC = () => {
       }
     };
 
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(`https://bairaha-app-api.vercel.app/api/users`);
+        setUsers(response.data.users);
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+      }
+    };
+
     fetchBreakdownDetails();
+    // fetchUsers();
   }, [machineName]);
 
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
-
-  const handleOpenScanner = () => {
-    navigation.navigate('BarcodeScannerScreen');
+  const handleParticipantSelect = (participant: User) => {
+    if (!selectedParticipants.some((p) => p.id === participant.id)) {
+      setSelectedParticipants([...selectedParticipants, participant]);
+    }
   };
 
   const handleMachinefixed = () => {
     navigation.navigate('Machinefixed', { machineName });
   };
+
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -73,54 +102,63 @@ const Fixingstatus: React.FC = () => {
 
   return (
     <View className="flex-1 p-4 bg-white">
-      <View className="flex-row items-center justify-between mb-4 ml-3 mr-3">
-        <TouchableOpacity onPress={handleGoBack}>
+      {/* Header */}
+      <View className="flex-row items-center justify-between mb-4">
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesome6 name="arrow-left-long" size={24} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleOpenScanner}>
-          <MaterialIcons name="qr-code-scanner" size={45} color="black" />
+        <Text className="text-xl font-bold">{machineName}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('BarcodeScannerScreen')}>
+          <MaterialIcons name="qr-code-scanner" size={35} color="black" />
         </TouchableOpacity>
       </View>
 
-      <View className="items-center">
-        <Text className="text-2xl font-bold text-black">{machineName}</Text>
-      </View>
-
-      <View className="items-center flex-1 mt-10">
-        <TouchableOpacity className="px-20 py-2 bg-[#ecb500] rounded-full">
+      <View className="px-20 py-2 bg-[#ecb500] rounded-full mt-5 mb-5">
           <Text className="text-lg font-bold text-center text-white">
             Machine is being Fixed
           </Text>
-        </TouchableOpacity>
+      </View>
 
-        <View className="p-4 mt-16 bg-gray-100 border border-gray-300 rounded-lg shadow-2xl h-96">
-          <Text className="font-bold">Scale of the breakdown</Text>
-          <Text>{breakdownDetails?.scaleofBreakdown.toUpperCase() || 'N/A'}</Text>
-
-          <Text className="mt-4 font-bold">Impact of breakdown on production</Text>
-          <Text>{breakdownDetails?.impactofBreakdown.toUpperCase() || 'N/A'}</Text>
-
-          <Text className="mt-4 font-bold">Description - Nature of the breakdown</Text>
-          <Text>{breakdownDetails?.description || 'N/A'}</Text>
-
-          <Text className="mt-4 font-bold">Breakdown reported time</Text>
-          <Text>{breakdownDetails?.timeReported ? new Date(breakdownDetails.timeReported).toLocaleString() : 'N/A'}</Text>
-
-          <Text className="mt-4 font-bold">Fixing started time</Text>
-          <Text>{breakdownDetails?.fixingStartTime ? new Date(breakdownDetails.fixingStartTime).toLocaleString() : 'N/A'}</Text>
+      <View className="p-4 bg-gray-100 border border-gray-300 rounded-lg shadow-2xl">
+        <View className="flex-row justify-between">
+          <Text className="font-bold">Scale of the Breakdown:</Text>
+          <Text>{breakdownDetails?.scaleofBreakdown?.toUpperCase() || 'N/A'}</Text>
         </View>
 
-        <TouchableOpacity className="flex-row items-center justify-between mt-10 mb-8 ml-5" onPress={handleMachinefixed}>
-          <View className="px-16 py-3 bg-[#0d6000] rounded-3xl">
-            <Text className="text-xl font-bold text-white" style={{ letterSpacing: 2 }}>
-              DONE FIXING
-            </Text>
-          </View>
-          <View className="ml-0">
-            <MaterialIcons name="keyboard-double-arrow-right" size={80} color="#0d6000" />
-          </View>
-        </TouchableOpacity>
+        <View className="flex-row justify-between mt-4">
+          <Text className="font-bold">Impact on Production:</Text>
+          <Text>{breakdownDetails?.impactofBreakdown?.toUpperCase() || 'N/A'}</Text>
+        </View>
+
+        <View className="flex-row justify-between mt-4">
+          <Text className="font-bold">Description:</Text>
+          <Text>{breakdownDetails?.description || 'N/A'}</Text>
+        </View>
+
+        <View className="flex-row justify-between mt-4">
+          <Text className="font-bold">Reported By:</Text>
+          <Text>{breakdownDetails?.breakdownInformedBy || 'N/A'}</Text>
+        </View>
+
+        <View className="flex-row justify-between mt-4">
+          <Text className="font-bold">Reported Time:</Text>
+          <Text>{breakdownDetails?.timeReported ? new Date(breakdownDetails.timeReported).toLocaleString() : 'N/A'}</Text>
+        </View>
+
+        <View className="flex-row justify-between mt-4">
+          <Text className="font-bold">Fixing Started Time:</Text>
+          <Text>{breakdownDetails?.fixingStartTime ? new Date(breakdownDetails.fixingStartTime).toLocaleString() : 'N/A'}</Text>
+        </View>
       </View>
+
+
+        <View className="flex-1 items-center justify-end h-screen mb-4">
+          <TouchableOpacity className="flex-row items-center bg-[#0d6000] px-16 py-3 rounded-full" onPress={handleMachinefixed}>
+            <Text className="text-white text-2xl font-bold mr-2">DONE FIXING</Text>
+            <Icon name="arrow-forward" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+
     </View>
   );
 };
