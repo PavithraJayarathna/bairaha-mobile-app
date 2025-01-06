@@ -51,7 +51,7 @@ const Reportbreakdown: React.FC = () => {
     breakdownInformedBy: currentUser?.fullname,
     timeReported: new Date().toISOString(),
     participantsToFixed:'',
-    usedMaterials:'',
+    usedMaterials: [],
     maintenanceInformedBy:'',
     specialNote:'',
     timeFixed:'pending',
@@ -160,7 +160,7 @@ const Reportbreakdown: React.FC = () => {
           <MaterialIcons name="keyboard-double-arrow-right" size={80} color="#bf111a" />
         </View>
       </TouchableOpacity> */}
-      <View className="flex-1 items-center justify-center h-screen">
+      <View className="flex-1 items-center justify-end h-screen mb-5">
       <TouchableOpacity className="flex-row items-center bg-[#bf111a] px-16 py-3 rounded-full" onPress={handleReportAndStartFixing}>
         <Text className="text-white text-2xl font-bold mr-2">REPORT</Text>
         <Icon name="arrow-forward" size={24} color="white" />

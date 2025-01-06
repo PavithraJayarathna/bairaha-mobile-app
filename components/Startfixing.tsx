@@ -5,6 +5,7 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import axios from 'axios';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import {useSelector} from 'react-redux';
 import { RootStackParamList } from '../types'; 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -30,6 +31,8 @@ const Startfixing: React.FC = () => {
   
   const [breakdownDetails, setBreakdownDetails] = useState<BreakdownDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  const { currentUser } = useSelector((state:any) => state.user);
 
   useEffect(() => {
     const fetchBreakdownDetails = async () => {
@@ -66,7 +69,7 @@ const Startfixing: React.FC = () => {
   const handleFixingStarted = async () => {
     const fixingData = {
       fixingStartTime: getCurrentTime(),
-      participantstoFixed: 'user 01',
+      participantstoFixed: currentUser,
     };
   
     try {
@@ -118,46 +121,39 @@ const Startfixing: React.FC = () => {
           </Text>
         </View>
 
-        <View className='p-4 mt-16 bg-gray-100 border border-gray-300 rounded-lg shadow-2xl h-80'>
-          <Text className='font-bold'>Scale of the breakdown</Text>
-          <Text>{breakdownDetails?.scaleofBreakdown.toUpperCase() || 'N/A'}</Text>
+        <View className='p-6 mt-8 bg-gray-100 border border-gray-300 rounded-xl shadow-lg w-full'>
+          <View className="flex-row justify-between items-center">
+            <Text className='font-bold text-gray-800'>Scale of the Breakdown</Text>
+            <Text className=' text-gray-700'>{breakdownDetails?.scaleofBreakdown.toUpperCase() || 'N/A'}</Text>
+          </View>
 
-          <Text className='mt-4 font-bold'>
-            Impact of breakdown on production
-          </Text>
-          <Text>{breakdownDetails?.impactofBreakdown.toUpperCase() || 'N/A'}</Text>
+          <View className='mt-6 flex-row justify-between items-center'>
+            <Text className='font-bold text-gray-800'>Impact on Production</Text>
+            <Text className=' text-gray-700'>{breakdownDetails?.impactofBreakdown.toUpperCase() || 'N/A'}</Text>
+          </View>
 
-          <Text className='mt-4 font-bold'>
-            Description - Nature of the breakdown
-          </Text>
-          <Text>{breakdownDetails?.description || 'N/A'}</Text>
+          <View className='mt-6 flex-row justify-between items-center'>
+            <Text className='font-bold text-gray-800'>Reported By</Text>
+            <Text className=' text-gray-700'>{breakdownDetails?.breakdownInformedBy}</Text>
+          </View>
 
-          <Text className='mt-4 font-bold'>
-            Breakdown reported time
-          </Text>
-          <Text>{breakdownDetails?.timeReported ? new Date(breakdownDetails.timeReported).toLocaleString() : 'N/A'}</Text>
+          <View className='mt-6'>
+            <Text className='font-bold text-gray-800'>Breakdown Reported Time</Text>
+            <Text className='mt-2 text-gray-700'>{breakdownDetails?.timeReported ? new Date(breakdownDetails.timeReported).toLocaleString() : 'N/A'}</Text>
+          </View>
 
-          <Text className='mt-4 font-bold'>
-            Reported by
-          </Text>
-          <Text>{breakdownDetails?.breakdownInformedBy}</Text>
+          <View className='mt-6'>
+            <Text className='font-bold text-gray-800'>Description - Nature of the Breakdown</Text>
+            <Text className='mt-2 text-gray-700'>{breakdownDetails?.description || 'N/A'}</Text>
+          </View>
 
         </View>
 
-        {/* <TouchableOpacity className='flex-row items-center justify-between mb-8 ml-6 mt-32' onPress={handleFixingstatus}>
-          <View className='px-16 py-3 bg-[#ecb500] rounded-3xl'>
-            <Text className='text-xl font-bold text-white' style={{ letterSpacing: 2 }}>
-              START FIXING
-            </Text>
-          </View>
-          <View className='ml-1'>
-            <MaterialIcons name="keyboard-double-arrow-right" size={80} color="#eab308" />
-          </View>
-        </TouchableOpacity> */}
 
-        <View className="flex-1 items-center justify-center h-screen">
+
+        <View className="flex-1 items-center justify-end h-screen mb-5">
           <TouchableOpacity className="flex-row items-center bg-[#eab308] px-16 py-3 rounded-full" onPress={handleFixingstatus}>
-            <Text className="text-white text-2xl font-bold mr-2">Start Fixing</Text>
+            <Text className="text-white text-2xl font-bold mr-2">START FIXING</Text>
             <Icon name="arrow-forward" size={24} color="white" />
           </TouchableOpacity>
         </View>

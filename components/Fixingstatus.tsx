@@ -152,7 +152,7 @@ const Fixingstatus: React.FC = () => {
       </View>
 
 
-        <View className="flex-1 items-center justify-end h-screen mb-4">
+        <View className="flex-1 items-center justify-end h-screen mb-5">
           <TouchableOpacity className="flex-row items-center bg-[#0d6000] px-16 py-3 rounded-full" onPress={handleMachinefixed}>
             <Text className="text-white text-2xl font-bold mr-2">DONE FIXING</Text>
             <Icon name="arrow-forward" size={24} color="white" />
