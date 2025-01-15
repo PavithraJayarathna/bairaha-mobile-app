@@ -69,14 +69,14 @@ const BreakdownService: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        <View className='w-11/12'>
+        {/* <View className='w-11/12'>
           <TouchableOpacity 
             className='flex-row justify-between items-center bg-[#bf111a] py-5 px-6 rounded-2xl mb-4'
           >
             <Text className='text-xl font-semibold text-white'>Inventory</Text>
             <Text className='text-2xl text-white'>📦</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
 
     </View>

@@ -281,7 +281,7 @@ const Machinefixed: React.FC = () => {
           className="border border-gray-300 rounded-lg p-2 mt-2"
         />
 
-        <TouchableOpacity className="bg-green-700 rounded-full p-3 mt-4" onPress={handleBreakdownfinish}>
+        <TouchableOpacity className="bg-[#0d6000] rounded-full p-3 mt-4" onPress={handleBreakdownfinish}>
           <Text className="text-center text-white font-bold text-lg">SUBMIT</Text>
         </TouchableOpacity>
       </ScrollView>
