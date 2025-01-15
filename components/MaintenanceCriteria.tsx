@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, BackHandler, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -7,7 +7,6 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types';
-
 import { signoutSuccess } from '../assets/redux/user/userSlice';
 
 type MaintenanceCriteriaNavigationProp = StackNavigationProp<
@@ -19,10 +18,8 @@ const MaintenanceCriteria: React.FC = () => {
   const navigation = useNavigation<MaintenanceCriteriaNavigationProp>();
   const dispatch = useDispatch();
 
-  // State for controlling the modal visibility
   const [isModalVisible, setModalVisible] = useState(false);
 
-  // Access currentUser from the Redux store
   const { currentUser } = useSelector((state: any) => state.user);
 
   const handleMachineList = () => {
@@ -42,6 +39,31 @@ const MaintenanceCriteria: React.FC = () => {
     setModalVisible(false);
     navigation.navigate('Login');
   };
+
+  useEffect(() => {
+    const onBackPress = () => {
+      if (navigation.isFocused()) { 
+        Alert.alert(
+          'Exit Page',
+          'Are you sure you want to exit?',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Exit', onPress: () => navigation.goBack() }, 
+          ],
+          { cancelable: false }
+        );
+        return true;
+      }
+      return false;
+    };
+  
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  
+    return () => {
+      backHandler.remove(); 
+    };
+  }, [navigation]);
+  
 
   return (
     <View className="flex-1 p-4 bg-white">
@@ -66,7 +88,7 @@ const MaintenanceCriteria: React.FC = () => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text className="text-xl font-bold mb-4">Sign Out</Text>
+            <Text className="mb-4 text-xl font-bold">Sign Out</Text>
             <TouchableOpacity style={styles.modalButton} onPress={handleSignOut}>
               <Text className="text-base text-white">Sign Out</Text>
             </TouchableOpacity>
@@ -81,14 +103,13 @@ const MaintenanceCriteria: React.FC = () => {
       </Modal>
 
       <View className="flex-1 bg-white">
-        {/* User Information */}
         <View className="items-center mt-8 mb-5">
           <Text className="text-3xl font-semibold">{`Welcome, ${currentUser?.firstname || 'User'}!`}</Text>
           {currentUser?.email && (
             <Text className="text-lg text-gray-600">{currentUser.email}</Text>
           )}
           {currentUser?.role && (
-            <Text className="text-md text-gray-500 mt-2">{`Role: ${currentUser.role}`}</Text>
+            <Text className="mt-2 text-gray-500 text-md">{`Role: ${currentUser.role}`}</Text>
           )}
         </View>
 
