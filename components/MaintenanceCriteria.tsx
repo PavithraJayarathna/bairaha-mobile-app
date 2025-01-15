@@ -10,10 +10,13 @@ import { RootStackParamList } from '../types';
 
 import { signoutSuccess } from '../assets/redux/user/userSlice';
 
-type MachineListScreenNavigationProp = StackNavigationProp<RootStackParamList, 'MachineList'>;
+type MaintenanceCriteriaNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'MachineList' | 'OngoingActionsList' | 'MyActionsList' | 'Login'
+>;
 
 const MaintenanceCriteria: React.FC = () => {
-  const navigation = useNavigation<MachineListScreenNavigationProp>();
+  const navigation = useNavigation<MaintenanceCriteriaNavigationProp>();
   const dispatch = useDispatch();
 
   // State for controlling the modal visibility
@@ -24,6 +27,14 @@ const MaintenanceCriteria: React.FC = () => {
 
   const handleMachineList = () => {
     navigation.navigate('MachineList');
+  };
+
+  const handleOngoingActionList = () => {
+    navigation.navigate('OngoingActionsList');
+  };
+
+  const handleMyActionList = () => {
+    navigation.navigate('MyActionsList');
   };
 
   const handleSignOut = () => {
@@ -40,10 +51,11 @@ const MaintenanceCriteria: React.FC = () => {
           onPress={() => setModalVisible(true)}
           className="flex-row items-center justify-center"
         >
-          <Text className="text-xl font-bold">{currentUser?.firstname || 'Testin user'}</Text>
+          <Text className="text-xl font-bold">
+            {currentUser?.firstname || 'Testing User'}
+          </Text>
           <MaterialIcons name="person" size={35} color="black" style={{ marginLeft: 10 }} />
         </TouchableOpacity>
-
       </View>
 
       <Modal
@@ -58,7 +70,10 @@ const MaintenanceCriteria: React.FC = () => {
             <TouchableOpacity style={styles.modalButton} onPress={handleSignOut}>
               <Text className="text-base text-white">Sign Out</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButtonSecondary} onPress={() => setModalVisible(false)}>
+            <TouchableOpacity
+              style={styles.modalButtonSecondary}
+              onPress={() => setModalVisible(false)}
+            >
               <Text className="text-base text-black">Cancel</Text>
             </TouchableOpacity>
           </View>
@@ -66,8 +81,15 @@ const MaintenanceCriteria: React.FC = () => {
       </Modal>
 
       <View className="flex-1 bg-white">
+        {/* User Information */}
         <View className="items-center mt-8 mb-5">
-          <Text className="text-3xl font-semibold">Your Sector</Text>
+          <Text className="text-3xl font-semibold">{`Welcome, ${currentUser?.firstname || 'User'}!`}</Text>
+          {currentUser?.email && (
+            <Text className="text-lg text-gray-600">{currentUser.email}</Text>
+          )}
+          {currentUser?.role && (
+            <Text className="text-md text-gray-500 mt-2">{`Role: ${currentUser.role}`}</Text>
+          )}
         </View>
 
         <View className="mt-20">
@@ -77,31 +99,26 @@ const MaintenanceCriteria: React.FC = () => {
           >
             <MaterialCommunityIcons name="robot-industrial" size={35} color="white" style={{ marginRight: 20 }} />
             <Text className="text-xl font-bold text-white">Machines</Text>
-            <View className="items-center justify-center h-8 ml-auto bg-[#bf111a] rounded-2xl w-8">
-              <Text className="text-xs text-white">{12}</Text>
-            </View>
           </TouchableOpacity>
         </View>
 
-        {/* Inventory Section */}
         <View className="mt-10">
-          <TouchableOpacity className="flex-row items-center bg-[#0d6000] rounded-2xl p-7">
-            <MaterialIcons name="inventory" size={35} color="white" style={{ marginRight: 20 }} />
-            <Text className="text-xl font-bold text-white">Inventory</Text>
-            <View className="items-center justify-center h-8 ml-auto bg-[#bf111a] rounded-2xl w-8">
-              <Text className="text-xs text-white">{8}</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {/* Ongoing Actions Section */}
-        <View className="mt-10">
-          <TouchableOpacity className="flex-row items-center bg-[#0d6000] rounded-2xl p-7">
+          <TouchableOpacity
+            className="flex-row items-center bg-[#0d6000] rounded-2xl p-7"
+            onPress={handleOngoingActionList}
+          >
             <AntDesign name="barschart" size={35} color="white" style={{ marginRight: 20 }} />
             <Text className="text-xl font-bold text-white">Ongoing Actions</Text>
-            <View className="items-center justify-center h-8 ml-auto bg-[#bf111a] rounded-2xl w-8">
-              <Text className="text-xs text-white">{15}</Text>
-            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View className="mt-10">
+          <TouchableOpacity
+            className="flex-row items-center bg-[#0d6000] rounded-2xl p-7"
+            onPress={handleMyActionList}
+          >
+            <MaterialIcons name="inventory" size={35} color="white" style={{ marginRight: 20 }} />
+            <Text className="text-xl font-bold text-white">My Actions</Text>
           </TouchableOpacity>
         </View>
       </View>

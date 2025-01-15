@@ -13,34 +13,41 @@ import Breakdownfinish from '../components/Breakdownfinish';
 import Fixingstatus from '../components/Fixingstatus';
 import Machinefixed from '../components/Machinefixed';
 import SectorSelection from '../components/SectorSelection';
+import OngoingActionsList from '@/components/OngoingActions';
+import MyActionsList from '@/components/MyActions';
 import Sign from '../components/Sign';
 import BarcodeScannerScreen from '../components/BarcodeScannerScreen';
 import { Provider } from 'react-redux';
-import {store} from '../assets/redux/store.js';
+import {store, persistor} from '../assets/redux/store.js';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const index = () => {
   const Stack = createNativeStackNavigator();
   
   return (
     <Provider store={store}>
-      <NavigationContainer independent={true}>
-        <Stack.Navigator initialRouteName="Homepage">
-          <Stack.Screen name="Homepage" component={Homepage} options={{ headerShown: false }} />
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-          <Stack.Screen name="MaintenanceCriteria" component={MaintenanceCriteria} options={{ headerShown: false }} />
-          <Stack.Screen name="MachineList" component={MachineList} options={{ headerShown: false }} />
-          <Stack.Screen name="MachinProfile" component={MachinProfile} options={{ headerShown: false }} />
-          <Stack.Screen name="BreakdownService" component={BreakdownService} options={{ headerShown: false }} />
-          <Stack.Screen name="Reportbreakdown" component={Reportbreakdown} options={{ headerShown: false }} />
-          <Stack.Screen name="Startfixing" component={Startfixing} options={{ headerShown: false }} />
-          <Stack.Screen name="Breakdownfinish" component={Breakdownfinish} options={{ headerShown: false }} />
-          <Stack.Screen name="Fixingstatus" component={Fixingstatus} options={{ headerShown: false }} />
-          <Stack.Screen name="Machinefixed" component={Machinefixed} options={{ headerShown: false }} />
-          <Stack.Screen name="SectorSelection" component={SectorSelection} options={{ headerShown: false }} />
-          <Stack.Screen name="Sign" component={Sign} options={{ headerShown: false }} />
-          <Stack.Screen name="BarcodeScannerScreen" component={BarcodeScannerScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer independent={true}>
+          <Stack.Navigator initialRouteName="Homepage">
+            <Stack.Screen name="Homepage" component={Homepage} options={{ headerShown: false }} />
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+            <Stack.Screen name="MaintenanceCriteria" component={MaintenanceCriteria} options={{ headerShown: false }} />
+            <Stack.Screen name="MachineList" component={MachineList} options={{ headerShown: false }} />
+            <Stack.Screen name="MachinProfile" component={MachinProfile} options={{ headerShown: false }} />
+            <Stack.Screen name="BreakdownService" component={BreakdownService} options={{ headerShown: false }} />
+            <Stack.Screen name="Reportbreakdown" component={Reportbreakdown} options={{ headerShown: false }} />
+            <Stack.Screen name="Startfixing" component={Startfixing} options={{ headerShown: false }} />
+            <Stack.Screen name="Breakdownfinish" component={Breakdownfinish} options={{ headerShown: false }} />
+            <Stack.Screen name="Fixingstatus" component={Fixingstatus} options={{ headerShown: false }} />
+            <Stack.Screen name="Machinefixed" component={Machinefixed} options={{ headerShown: false }} />
+            <Stack.Screen name="SectorSelection" component={SectorSelection} options={{ headerShown: false }} />
+            <Stack.Screen name="Sign" component={Sign} options={{ headerShown: false }} />
+            <Stack.Screen name="BarcodeScannerScreen" component={BarcodeScannerScreen} />
+            <Stack.Screen name="OngoingActionsList" component={OngoingActionsList} options={{ headerShown: false }}/>
+            <Stack.Screen name="MyActionsList" component={MyActionsList} options={{ headerShown: false }}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 };

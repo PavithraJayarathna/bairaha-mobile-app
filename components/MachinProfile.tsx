@@ -127,18 +127,13 @@ const MachinProfile: React.FC = () => {
 
       <View className="items-center justify-end flex-1 mb-3">
         <TouchableOpacity onPress={handleBreakdownService}>
-          <View
-            style={{
-              backgroundColor: '#bf111a',
-              padding: 2,
-              paddingRight: 25, 
-              paddingLeft: 25,               
-              borderRadius: 20,
-              borderWidth: 2,
-              borderColor: '#ffffff',
-            }}
-          >
-            <MaterialCommunityIcons name="hammer-wrench" size={60} color="white" />
+        <View className="bg-[#bf111a] w-11/12 p-4 px-6 rounded-2xl border-2 border-white flex-row items-center justify-between">
+
+            <Text className="text-xl font-semibold text-white">
+              Breakdown Services
+            </Text>
+            <Text className='text-2xl'>🛠️</Text>
+            
           </View>
         </TouchableOpacity>
       </View>

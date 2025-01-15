@@ -15,11 +15,12 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 type MachinefixedScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Machinefixed'>;
 
 interface RouteParams {
-  machineName: string;
+  breakdownID: string;
 }
 
 interface BreakdownDetails {
@@ -29,6 +30,8 @@ interface BreakdownDetails {
   timeReported: string;
   fixingStartTime: string;
   breakdownInformedBy: string;
+  maintenanceInformedBy: string;
+  machinename: string;	
 }
 
 interface User {
@@ -39,7 +42,7 @@ interface User {
 const Fixingstatus: React.FC = () => {
   const navigation = useNavigation<MachinefixedScreenNavigationProp>();
   const route = useRoute();
-  const { machineName } = route.params as RouteParams;
+  const { breakdownID } = route.params as RouteParams;
 
   const [breakdownDetails, setBreakdownDetails] = useState<BreakdownDetails | null>(null);
   const [loading, setLoading] = useState(true);
@@ -53,8 +56,8 @@ const Fixingstatus: React.FC = () => {
         const response = await axios.get(`https://bairaha-app-api.vercel.app/api/machine/get-breakdowns`);
         const allBreakdowns = response.data.breakdowns;
 
-        const filteredBreakdown = machineName
-          ? allBreakdowns.find((breakdown: { machinename: string }) => breakdown.machinename === machineName)
+        const filteredBreakdown = breakdownID
+          ? allBreakdowns.find((breakdown: { _id: string }) => breakdown._id === breakdownID)
           : null;
 
         setBreakdownDetails(filteredBreakdown || null);
@@ -76,7 +79,7 @@ const Fixingstatus: React.FC = () => {
 
     fetchBreakdownDetails();
     // fetchUsers();
-  }, [machineName]);
+  }, []);
 
   const handleParticipantSelect = (participant: User) => {
     if (!selectedParticipants.some((p) => p.id === participant.id)) {
@@ -84,8 +87,12 @@ const Fixingstatus: React.FC = () => {
     }
   };
 
-  const handleMachinefixed = () => {
-    navigation.navigate('Machinefixed', { machineName });
+  const handleMachinefixed = (machineName: string | undefined) => {
+    if (!machineName) {
+      console.log('Please select a machine');
+      return;
+    }
+    navigation.navigate('Machinefixed', {machineName });
   };
 
   const filteredUsers = users.filter((user) =>
@@ -107,7 +114,7 @@ const Fixingstatus: React.FC = () => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesome6 name="arrow-left-long" size={24} color="black" />
         </TouchableOpacity>
-        <Text className="text-xl font-bold">{machineName}</Text>
+        <Text className="text-xl font-bold">{breakdownDetails?.machinename}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('BarcodeScannerScreen')}>
           <MaterialIcons name="qr-code-scanner" size={35} color="black" />
         </TouchableOpacity>
@@ -141,6 +148,11 @@ const Fixingstatus: React.FC = () => {
         </View>
 
         <View className="flex-row justify-between mt-4">
+          <Text className="font-bold">Fixing Started By:</Text>
+          <Text>{breakdownDetails?.maintenanceInformedBy || 'N/A'}</Text>
+        </View>
+
+        <View className="flex-row justify-between mt-4">
           <Text className="font-bold">Reported Time:</Text>
           <Text>{breakdownDetails?.timeReported ? new Date(breakdownDetails.timeReported).toLocaleString() : 'N/A'}</Text>
         </View>
@@ -153,9 +165,9 @@ const Fixingstatus: React.FC = () => {
 
 
         <View className="flex-1 items-center justify-end h-screen mb-5">
-          <TouchableOpacity className="flex-row items-center bg-[#0d6000] px-16 py-3 rounded-full" onPress={handleMachinefixed}>
+          <TouchableOpacity className="flex-row items-center justify-between bg-[#0d6000] px-6 py-3 rounded-full" onPress={()=>handleMachinefixed(breakdownDetails?.machinename)}>
             <Text className="text-white text-2xl font-bold mr-2">DONE FIXING</Text>
-            <Icon name="arrow-forward" size={24} color="white" />
+            <MaterialCommunityIcons name="arrow-right-bold-circle" size={30} color="white" />
           </TouchableOpacity>
         </View>
 

@@ -7,16 +7,17 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
 import { RootStackParamList } from '../types'; 
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 type FixingstatusScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Fixingstatus'>;
 
 interface RouteParams {
-  machineId: string;
-  machineName: string;
+  breakdownID: string;
 }
 
 interface BreakdownDetails {
+  breakdownID: string;
+  machinename: string;	
   scaleofBreakdown: string;
   impactofBreakdown: string;
   description: string;
@@ -27,7 +28,7 @@ interface BreakdownDetails {
 const Startfixing: React.FC = () => {
   const navigation = useNavigation<FixingstatusScreenNavigationProp>();
   const route = useRoute();
-  const { machineId, machineName } = route.params as RouteParams;
+  const { breakdownID } = route.params as RouteParams;
   
   const [breakdownDetails, setBreakdownDetails] = useState<BreakdownDetails | null>(null);
   const [loading, setLoading] = useState(true);
@@ -40,11 +41,11 @@ const Startfixing: React.FC = () => {
         const response = await axios.get(`https://bairaha-app-api.vercel.app/api/machine/get-breakdowns`);
         const allBreakdowns = response.data.breakdowns;
   
-        const filteredBreakdown = machineName
-          ? allBreakdowns.find((breakdown: { machinename: string; }) => breakdown.machinename === machineName) //This want to change
+        const filteredBreakdown = breakdownID
+          ? allBreakdowns.find((breakdown: { _id: string; }) => breakdown._id === breakdownID)
           : null;
   
-        // console.log(machineName, filteredBreakdown);
+        console.log(breakdownID, filteredBreakdown);
         setBreakdownDetails(filteredBreakdown || null);
       } catch (error) {
         console.error('Failed to fetch breakdown details:', error);
@@ -55,30 +56,31 @@ const Startfixing: React.FC = () => {
     };
   
     fetchBreakdownDetails();
-  }, [machineName, machineId]);
+  }, []);
   
   
 
   const handleFixingstatus = () => {
     handleFixingStarted();
-    navigation.navigate('Fixingstatus', { machineName });
   };
   
   const getCurrentTime = () => new Date().toISOString();
 
   const handleFixingStarted = async () => {
     const fixingData = {
+      status: 'Fixing',
       fixingStartTime: getCurrentTime(),
-      participantstoFixed: currentUser,
+      maintenanceInformedBy: currentUser?.fullname,
     };
   
     try {
       const response = await axios.put(
-        `https://bairaha-app-api.vercel.app/api/machine/breakdown/${machineName}/fixing-start`,
+        `https://bairaha-app-api.vercel.app/api/machine/breakdown/${breakdownDetails?.machinename}/fixing-start`,
         fixingData
       );
       console.log(fixingData);
-      Alert.alert('Success', 'Breakdown fixing started successfully!');
+      Alert.alert('Success', 'Breakdown fixing started successfully!');     
+      navigation.navigate('MaintenanceCriteria');
     } catch (error) {
       console.error("Error starting the fixing process:", error);
       Alert.alert('Error', 'There was an error starting the fixing process. Please try again.');
@@ -108,7 +110,7 @@ const Startfixing: React.FC = () => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <FontAwesome6 name="arrow-left-long" size={24} color="black" />
         </TouchableOpacity>
-        <Text className="text-xl font-bold">{machineName}</Text>
+        <Text className="text-xl font-bold">{breakdownDetails?.machinename}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('BarcodeScannerScreen')}>
           <MaterialIcons name="qr-code-scanner" size={35} color="black" />
         </TouchableOpacity>
@@ -152,9 +154,9 @@ const Startfixing: React.FC = () => {
 
 
         <View className="flex-1 items-center justify-end h-screen mb-5">
-          <TouchableOpacity className="flex-row items-center bg-[#eab308] px-16 py-3 rounded-full" onPress={handleFixingstatus}>
+          <TouchableOpacity className="flex-row items-center justify-between bg-[#eab308] px-5 py-3 rounded-full" onPress={handleFixingstatus}>
             <Text className="text-white text-2xl font-bold mr-2">START FIXING</Text>
-            <Icon name="arrow-forward" size={24} color="white" />
+            <MaterialCommunityIcons name="arrow-right-bold-circle" size={30} color="white" />
           </TouchableOpacity>
         </View>
       </View>
