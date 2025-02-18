@@ -15,6 +15,8 @@ import Machinefixed from '../components/Machinefixed';
 import SectorSelection from '../components/SectorSelection';
 import OngoingActionsList from '@/components/OngoingActions';
 import MyActionsList from '@/components/MyActions';
+import ScheduledMaintenanceList from '../components/ScheduledMaintenance';
+import MaintenanceDetails from '@/components/MaintenanceDetails';
 import Sign from '../components/Sign';
 import BarcodeScannerScreen from '../components/BarcodeScannerScreen';
 import { Provider } from 'react-redux';
@@ -45,6 +47,8 @@ const index = () => {
             <Stack.Screen name="BarcodeScannerScreen" component={BarcodeScannerScreen} />
             <Stack.Screen name="OngoingActionsList" component={OngoingActionsList} options={{ headerShown: false }}/>
             <Stack.Screen name="MyActionsList" component={MyActionsList} options={{ headerShown: false }}/>
+            <Stack.Screen name="ScheduledMaintenanceList" component={ScheduledMaintenanceList} options={{ headerShown: false }}/>
+            <Stack.Screen name="MaintenanceDetails" component={MaintenanceDetails} options={{ headerShown: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
       </PersistGate>
