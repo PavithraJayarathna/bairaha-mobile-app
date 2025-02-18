@@ -14,6 +14,8 @@ export type RootStackParamList = {
   Startfixing: {breakdownID: string};
   MachinProfile: { machineId: string};
   BarcodeScannerScreen: undefined; 
+  ScheduledMaintenanceList: undefined;
+  MaintenanceDetails: {taskId: string};
 
   
 };
