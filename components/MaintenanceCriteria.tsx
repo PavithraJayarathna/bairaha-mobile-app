@@ -7,7 +7,6 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types';
-
 import { signoutSuccess } from '../assets/redux/user/userSlice';
 
 type MaintenanceCriteriaNavigationProp = StackNavigationProp<
@@ -65,8 +64,6 @@ const MaintenanceCriteria: React.FC = () => {
     navigation.navigate('Login');
   };
 
-
-
   return (
     <View className="flex-1 p-4 bg-white">
       <View className="flex-row items-center justify-between mb-4 ml-3 mr-3">
@@ -90,7 +87,7 @@ const MaintenanceCriteria: React.FC = () => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text className="text-xl font-bold mb-4">Sign Out</Text>
+            <Text className="mb-4 text-xl font-bold">Sign Out</Text>
             <TouchableOpacity style={styles.modalButton} onPress={handleSignOut}>
               <Text className="text-base text-white">Sign Out</Text>
             </TouchableOpacity>
@@ -105,11 +102,10 @@ const MaintenanceCriteria: React.FC = () => {
       </Modal>
 
       <View className="flex-1 bg-white">
-        {/* User Information */}
         <View className="items-center mt-8 mb-5">
           <Text className="text-3xl font-semibold">{`Welcome, ${currentUser?.firstname || 'User'}!`}</Text>
           {currentUser?.role && (
-            <Text className="text-md text-gray-500 mt-2">{`Role: ${currentUser.role}`}</Text>
+            <Text className="mt-2 text-gray-500 text-md">{`Role: ${currentUser.role}`}</Text>
           )}
         </View>
 
