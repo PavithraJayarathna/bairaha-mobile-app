@@ -7,7 +7,6 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types';
-
 import { signoutSuccess } from '../assets/redux/user/userSlice';
 
 type MaintenanceCriteriaNavigationProp = StackNavigationProp<

@@ -17,22 +17,27 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   signInFailure,
   signInSuccess,
   signInStart,
 } from "../assets/redux/user/userSlice";
 
-type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, "Login">;
+type LoginScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "Login"
+>;
 
 const Login: React.FC = () => {
   const [phonenumber, setPhone] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isRememberMe, setIsRememberMe] = useState(false);
   const [hidePassword, setHidePassword] = useState<boolean>(true);
-  const [loading, setLoading] = useState<boolean>(false); // Loading state
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+
+  const { currentUser } = useSelector((state: any) => state.user);
 
   const navigation = useNavigation<LoginScreenNavigationProp>();
   const dispatch = useDispatch();
@@ -55,7 +60,7 @@ const Login: React.FC = () => {
   const handleLogin = async () => {
     if (!validateForm()) return;
 
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       dispatch(signInStart());
       const response = await axios.post(
@@ -75,7 +80,7 @@ const Login: React.FC = () => {
       dispatch(signInFailure(errMessage));
       Alert.alert("Login Failed", errMessage);
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
@@ -98,29 +103,34 @@ const Login: React.FC = () => {
     }, [])
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      setPassword(""); // Clear password on page focus
+    }, [])
+  );
+
+  useEffect(() => {
+    if (currentUser) {
+      navigation.navigate("MaintenanceCriteria");
+    }
+  }, [currentUser, navigation]);
+
   return (
-    <SafeAreaView className="flex-1 bg-white px-6">
+    <SafeAreaView className="flex-1 px-6 bg-white">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-        className="flex-1 justify-center"
+        className="justify-center flex-1"
       >
         <View className="mb-6">
           <Text className="text-3xl font-extrabold text-black">Log In</Text>
-          {/* <TouchableOpacity
-            onPress={() => navigation.navigate("ResetPassword")}
-          >
-            <Text className="text-sm text-gray-500 underline mt-2">
-              Forgot password?
-            </Text>
-          </TouchableOpacity> */}
         </View>
 
         {error ? (
-          <Text className="text-red-500 text-sm mb-4">{error}</Text>
+          <Text className="mb-4 text-sm text-red-500">{error}</Text>
         ) : null}
 
         <View>
-          <Text className="text-lg text-black mb-2">Phone Number</Text>
+          <Text className="mb-2 text-lg text-black">Phone Number</Text>
           <TextInput
             className="w-full px-4 py-2 mb-4 border border-[#0d6000] rounded"
             placeholder="Enter phone number"
@@ -129,7 +139,7 @@ const Login: React.FC = () => {
             onChangeText={setPhone}
           />
 
-          <Text className="text-lg text-black mb-2">Password</Text>
+          <Text className="mb-2 text-lg text-black">Password</Text>
           <View className="relative">
             <TextInput
               className="w-full px-4 py-2 border border-[#0d6000] rounded pr-12"
@@ -156,7 +166,9 @@ const Login: React.FC = () => {
               isRememberMe ? "bg-[#0d6000] border-[#0d6000]" : "border-gray-300"
             } flex items-center justify-center`}
           >
-            {isRememberMe && <FontAwesomeIcon icon={faCheck} size={16} color="#fff" />}
+            {isRememberMe && (
+              <FontAwesomeIcon icon={faCheck} size={16} color="#fff" />
+            )}
           </TouchableOpacity>
           <Text className="ml-2 text-gray-700">Remember me</Text>
         </View>

@@ -91,9 +91,9 @@ const MyActionsList: React.FC = () => {
       if (maintenanceInformedBy === currentUser?.fullname) {
         return "#0d6000"; // Green
       }
-      return "#6c757d"; // Gray
+      return "#D3D3D3"; // Gray
     }
-    return "black"; // Default
+    return "#D3D3D3"; // Default
   };
 
   if (loading) {
@@ -141,7 +141,7 @@ const MyActionsList: React.FC = () => {
             onPress={() => handleBreakdownProfile(breakdown._id, breakdown.status)}
           >
             <View
-              className="px-7 py-4 mt-1 rounded-xl w-full"
+              className="w-full py-4 mt-1 px-7 rounded-xl"
               style={{
                 backgroundColor: getBoxColor(breakdown.maintenanceInformedBy),
               }}
@@ -156,7 +156,7 @@ const MyActionsList: React.FC = () => {
       </ScrollView>
 
       <View className="mt-2">
-        <Text className="text-center text-sm text-gray-500">
+        <Text className="text-sm text-center text-gray-500">
           — Scroll down for more —
         </Text>
       </View>
