@@ -23,21 +23,26 @@ type StartfixingScreenNavigationProp = StackNavigationProp<RootStackParamList, '
 interface RouteParams {
   machineId: string;
   machineName: string;
+  reqMaintenance?: boolean; // Optional param to determine maintenance mode
 }
 
 const Reportbreakdown: React.FC = () => {
   const navigation = useNavigation<StartfixingScreenNavigationProp>();
   const route = useRoute();
-  const { machineId, machineName } = route.params as RouteParams;
+  const { machineId, machineName, reqMaintenance } = route.params as RouteParams;
   const { currentUser } = useSelector((state: any) => state.user);
 
   const [selectedScale, setSelectedScale] = useState('high');
   const [selectedImpact, setSelectedImpact] = useState('high');
   const [description, setDescription] = useState('');
-  const [loading, setLoading] = useState(false); // Track loading state
+  const [loading, setLoading] = useState(false);
+
+  // Determine the status and title based on request type
+  const isMaintenance = reqMaintenance ?? false;
+  const pageTitle = isMaintenance ? 'Report Scheduled Maintenance' : 'Report Breakdown';
 
   const reportData = {
-    status: 'Breakdown',
+    status: isMaintenance ? 'Scheduled Maintenance' : 'Breakdown',
     machinename: machineName,
     scaleofBreakdown: selectedScale,
     impactofBreakdown: selectedImpact,
@@ -56,26 +61,21 @@ const Reportbreakdown: React.FC = () => {
     fixingStartTime: 'pending',
   };
 
-  const handleReportBreakdown = async () => {
-    setLoading(true); // Start loading
+  const handleReport = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
         'https://bairaha-app-api.vercel.app/api/machine/report-breakdown',
         reportData
       );
       console.log(reportData);
-      Alert.alert('Success', 'Breakdown reported successfully!');
+      Alert.alert('Success', `${pageTitle} reported successfully!`);
     } catch (error) {
-      console.error('Error reporting breakdown:', error);
-      Alert.alert('Error', 'There was an error reporting the breakdown. Please try again.');
+      console.error(`Error reporting ${pageTitle}:`, error);
+      Alert.alert('Error', `There was an error reporting ${pageTitle}. Please try again.`);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
-  };
-
-  const handleReportAndStartFixing = async () => {
-    await handleReportBreakdown();
-    if (!loading) navigation.navigate('MachineList');
   };
 
   return (
@@ -91,7 +91,7 @@ const Reportbreakdown: React.FC = () => {
       </View>
 
       <View className="items-center flex-2 mt-8 mb-8 py-2 rounded-full bg-[#0d6000]">
-        <Text className="text-lg font-bold text-center text-white">Report Breakdown</Text>
+        <Text className="text-lg font-bold text-center text-white">{pageTitle}</Text>
       </View>
 
       <View className="w-full mb-8">
@@ -123,10 +123,12 @@ const Reportbreakdown: React.FC = () => {
       </View>
 
       <View className="w-full mb-6">
-        <Text className="text-gray-600 mb-2">Briefly Describe the Nature of the Breakdown</Text>
+        <Text className="text-gray-600 mb-2">
+          {isMaintenance ? 'Describe the Scheduled Maintenance' : 'Briefly Describe the Nature of the Breakdown'}
+        </Text>
         <View className="relative">
           <TextInput
-            placeholder="Describe the issue..."
+            placeholder={isMaintenance ? 'Describe the maintenance task...' : 'Describe the issue...'}
             value={description}
             onChangeText={setDescription}
             className="border border-gray-300 rounded-lg bg-white shadow-md p-4 pt-2 pb-16"
@@ -147,9 +149,11 @@ const Reportbreakdown: React.FC = () => {
         ) : (
           <TouchableOpacity
             className="flex-row items-center justify-between w-2/3 bg-[#bf111a] px-6 py-3 rounded-full"
-            onPress={handleReportAndStartFixing}
+            onPress={handleReport}
           >
-            <Text className="text-white text-2xl font-bold mr-2">REPORT</Text>
+            <Text className="text-white text-2xl font-bold mr-2">
+              {isMaintenance ? 'SCHEDULE' : 'REPORT'}
+            </Text>
             <MaterialCommunityIcons name="arrow-right-bold-circle" size={30} color="white" />
           </TouchableOpacity>
         )}

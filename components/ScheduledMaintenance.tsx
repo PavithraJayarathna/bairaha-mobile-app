@@ -77,7 +77,8 @@ const ScheduledMaintenanceList: React.FC = () => {
     navigation.navigate("MaintenanceDetails", { 
       taskId: task._id, 
       machineId: task._id,
-      machineName: task.machinename 
+      machineName: task.machinename,
+      isMaintenance: true,
     });
   };
   

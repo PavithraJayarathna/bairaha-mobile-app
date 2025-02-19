@@ -61,8 +61,9 @@ const MaintenanceDetails: React.FC = () => {
   }, [taskId]);
 
   const handleStartMaintenance = async () => {
-    navigation.navigate('Reportbreakdown', { machineId, machineName });
+    navigation.navigate('Reportbreakdown', { machineId, machineName, isMaintenance: true });
   };
+  
 
   if (loading) {
     return (

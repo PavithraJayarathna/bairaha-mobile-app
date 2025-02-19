@@ -18,7 +18,7 @@ const BreakdownService: React.FC = () => {
   const { machineId, machineName } = route.params as RouteParams; // Get machineId and machineName from params
 
   const handleReportbreakdown = () => {
-    navigation.navigate('Reportbreakdown', { machineId, machineName });
+    navigation.navigate('Reportbreakdown', { machineId, machineName, isMaintenance:false });
   };
 
   const handleGoBack = () => {
