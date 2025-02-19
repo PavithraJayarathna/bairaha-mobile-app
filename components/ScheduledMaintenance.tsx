@@ -74,8 +74,14 @@ const ScheduledMaintenanceList: React.FC = () => {
   };
 
   const handlePress = (task: Maintenance) => {
-    navigation.navigate("MaintenanceDetails", { taskId: task._id });
+    navigation.navigate("MaintenanceDetails", { 
+      taskId: task._id, 
+      machineId: task._id,
+      machineName: task.machinename,
+      isMaintenance: true,
+    });
   };
+  
 
   if (loading && !refreshing) {
     return (
@@ -109,29 +115,48 @@ const ScheduledMaintenanceList: React.FC = () => {
         />
       </View>
 
-      {/* Scrollable maintenance list with pull-to-refresh */}
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        {filteredMaintenance.map((task) => (
-          <TouchableOpacity
-            key={task._id}
-            className="flex-row items-center justify-center mb-2 ml-2"
-            onPress={() => handlePress(task)}
-          >
-            <View className="px-7 py-4 mt-1 rounded-xl w-full bg-blue-500">
-              <Text className="text-lg font-bold text-white">
-                {task.machinename}
-              </Text>
-              <Text className="text-sm text-white">
-                Scheduled Date: {new Date(task.dueDate).toDateString()}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+        {filteredMaintenance.map((task) => {
+          const dueDate = new Date(task.dueDate);
+          const today = new Date();
+          
+          // Reset time to midnight for accurate comparison
+          today.setHours(0, 0, 0, 0);
+          dueDate.setHours(0, 0, 0, 0);
+
+          // Calculate time difference in days
+          const timeDiff = (dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+
+          let backgroundColor = "#0d6000"; // Default Blue
+          if (timeDiff < 0) {
+            backgroundColor = "#bf111a"; // Past -> Red
+          } else if (timeDiff <= 7) {
+            backgroundColor = "#fbbf24"; // Within this week -> Yellow
+          }
+
+          return (
+            <TouchableOpacity
+              key={task._id}
+              className="flex-row items-center justify-center mb-2 ml-2"
+              onPress={() => handlePress(task)}
+            >
+              <View style={{ backgroundColor }} className="px-7 py-4 mt-1 rounded-xl w-full">
+                <Text className="text-lg font-bold text-white">
+                  {task.machinename}
+                </Text>
+                <Text className="text-sm text-white">
+                  Scheduled Date: {dueDate.toDateString()}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
+
 
       <View className="mt-2">
         <Text className="text-center text-sm text-gray-500">

@@ -18,7 +18,7 @@ const BreakdownService: React.FC = () => {
   const { machineId, machineName } = route.params as RouteParams; // Get machineId and machineName from params
 
   const handleReportbreakdown = () => {
-    navigation.navigate('Reportbreakdown', { machineId, machineName });
+    navigation.navigate('Reportbreakdown', { machineId, machineName, isMaintenance:false });
   };
 
   const handleGoBack = () => {
@@ -52,7 +52,7 @@ const BreakdownService: React.FC = () => {
       <View className='flex-1 justify-center items-center'>
         <View className='w-11/12'>
           <TouchableOpacity 
-            className='flex-row justify-between items-center bg-[#bf111a] py-5 px-6 rounded-2xl mb-4'
+            className='flex-row justify-between items-center bg-[#0284c7] py-5 px-6 rounded-2xl mb-4'
             onPress={handleReportbreakdown}
           >
             <Text className='text-xl font-semibold text-white'>Breakdown</Text>
@@ -62,21 +62,13 @@ const BreakdownService: React.FC = () => {
 
         <View className='w-11/12'>
           <TouchableOpacity 
-            className='flex-row justify-between items-center bg-[#bf111a] py-5 px-6 rounded-2xl mb-4'
+            className='flex-row justify-between items-center bg-[#0284c7] py-5 px-6 rounded-2xl mb-4'
           >
             <Text className='text-xl font-semibold text-white'>Scheduled Maintenance</Text>
             <Text className='text-2xl text-white'>⚙️</Text>
           </TouchableOpacity>
         </View>
 
-        {/* <View className='w-11/12'>
-          <TouchableOpacity 
-            className='flex-row justify-between items-center bg-[#bf111a] py-5 px-6 rounded-2xl mb-4'
-          >
-            <Text className='text-xl font-semibold text-white'>Inventory</Text>
-            <Text className='text-2xl text-white'>📦</Text>
-          </TouchableOpacity>
-        </View> */}
       </View>
 
     </View>

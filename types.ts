@@ -6,7 +6,7 @@ export type RootStackParamList = {
   BreakdownService: {machineId: string, machineName: string};
   Fixingstatus: {breakdownID: string};
   Machinefixed: {machineName: string};
-  Reportbreakdown: {machineId: string, machineName: string};
+  Reportbreakdown: {machineId: string, machineName: string, isMaintenance: boolean};
   Breakdownfinish: {machineName: string};
   OngoingActionsList: undefined;
   MyActionsList: undefined;
@@ -15,7 +15,7 @@ export type RootStackParamList = {
   MachinProfile: { machineId: string};
   BarcodeScannerScreen: undefined; 
   ScheduledMaintenanceList: undefined;
-  MaintenanceDetails: {taskId: string};
+  MaintenanceDetails: {taskId: string, machineId: string, machineName: string, isMaintenance:boolean};
 
   
 };

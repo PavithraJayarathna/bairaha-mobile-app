@@ -114,7 +114,7 @@ const MachineList: React.FC = () => {
             className="flex-row items-center justify-between mb-2 ml-2"
             onPress={() => handleMachinProfile(machine._id)}
           >
-            <View className="w-full px-28 py-7 mt-2 bg-[#bf111a] rounded-2xl pl-10">
+            <View className="w-full px-28 py-7 mt-2 bg-[#0284c7] rounded-2xl pl-10">
               <Text className="text-lg font-bold text-white">
                 {machine.machinename}
               </Text>

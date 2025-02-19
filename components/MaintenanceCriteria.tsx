@@ -64,6 +64,10 @@ const MaintenanceCriteria: React.FC = () => {
     navigation.navigate('Login');
   };
 
+  const handleOpenScanner = () => {
+    navigation.navigate('BarcodeScannerScreen');
+  };
+  
   return (
     <View className="flex-1 p-4 bg-white">
       <View className="flex-row items-center justify-between mb-4 ml-3 mr-3">
@@ -79,36 +83,26 @@ const MaintenanceCriteria: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <Modal
-        visible={isModalVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text className="mb-4 text-xl font-bold">Sign Out</Text>
-            <TouchableOpacity style={styles.modalButton} onPress={handleSignOut}>
-              <Text className="text-base text-white">Sign Out</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalButtonSecondary}
-              onPress={() => setModalVisible(false)}
-            >
-              <Text className="text-base text-black">Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
+  
       <View className="flex-1 bg-white">
-        <View className="items-center mt-8 mb-5">
-          <Text className="text-3xl font-semibold">{`Welcome, ${currentUser?.firstname || 'User'}!`}</Text>
-          {currentUser?.role && (
-            <Text className="mt-2 text-gray-500 text-md">{`Role: ${currentUser.role}`}</Text>
-          )}
+        {/* User Information and QR Scanner in a Row */}
+        <View className="flex-row items-center justify-between mt-8 mb-5 px-4">
+          {/* User Information (Left-aligned) */}
+          <View>
+            <Text className="text-2xl font-semibold">{`Welcome, ${currentUser?.firstname || 'User'}!`}</Text>
+            {currentUser?.role && (
+              <Text className="text-md text-gray-500 mt-2">{`Role: ${currentUser.role}`}</Text>
+            )}
+          </View>
+
+          {/* QR Scanner Button (Right-aligned) */}
+          <TouchableOpacity onPress={handleOpenScanner} className="p-4 bg-gray-200 rounded-full">
+            <MaterialIcons name="qr-code-scanner" size={35} color="black" />
+          </TouchableOpacity>
         </View>
 
+  
+        {/* Buttons */}
         <View className="mt-10">
           <TouchableOpacity
             className="flex-row items-center bg-[#0d6000] rounded-2xl p-7"
@@ -118,7 +112,7 @@ const MaintenanceCriteria: React.FC = () => {
             <Text className="text-xl font-bold text-white">Machines</Text>
           </TouchableOpacity>
         </View>
-
+  
         <View className="mt-10">
           <TouchableOpacity
             className="flex-row items-center bg-[#0d6000] rounded-2xl p-7"
@@ -128,7 +122,7 @@ const MaintenanceCriteria: React.FC = () => {
             <Text className="text-xl font-bold text-white">Ongoing Actions</Text>
           </TouchableOpacity>
         </View>
-
+  
         <View className="mt-10">
           <TouchableOpacity
             className="flex-row items-center bg-[#0d6000] rounded-2xl p-7"
@@ -138,7 +132,7 @@ const MaintenanceCriteria: React.FC = () => {
             <Text className="text-xl font-bold text-white">My Actions</Text>
           </TouchableOpacity>
         </View>
-
+  
         <View className="mt-10">
           <TouchableOpacity
             className="flex-row items-center bg-[#0d6000] rounded-2xl p-7"
@@ -148,10 +142,12 @@ const MaintenanceCriteria: React.FC = () => {
             <Text className="text-xl font-bold text-white">Scheduled Maintenance</Text>
           </TouchableOpacity>
         </View>
-
+  
+        
       </View>
     </View>
   );
+  
 };
 
 const styles = StyleSheet.create({
