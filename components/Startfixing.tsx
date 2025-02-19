@@ -59,11 +59,6 @@ const Startfixing: React.FC = () => {
   }, []);
   
   
-
-  const handleFixingstatus = () => {
-    handleFixingStarted();
-  };
-  
   const getCurrentTime = () => new Date().toISOString();
 
   const handleFixingStarted = async () => {
@@ -154,7 +149,7 @@ const Startfixing: React.FC = () => {
 
 
         <View className="flex-1 items-center justify-end h-screen mb-5">
-          <TouchableOpacity className="flex-row items-center justify-between bg-[#eab308] px-5 py-3 rounded-full" onPress={handleFixingstatus}>
+          <TouchableOpacity className="flex-row items-center justify-between bg-[#eab308] px-5 py-3 rounded-full" onPress={handleFixingStarted}>
             <Text className="text-white text-2xl font-bold mr-2">START FIXING</Text>
             <MaterialCommunityIcons name="arrow-right-bold-circle" size={30} color="white" />
           </TouchableOpacity>

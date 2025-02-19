@@ -127,7 +127,7 @@ const MachinProfile: React.FC = () => {
 
       <View className="items-center justify-end flex-1 mb-3">
         <TouchableOpacity onPress={handleBreakdownService}>
-        <View className="bg-[#bf111a] w-11/12 p-4 px-6 rounded-2xl border-2 border-white flex-row items-center justify-between">
+        <View className="bg-[#0284c7] w-11/12 p-4 px-6 rounded-2xl border-2 border-white flex-row items-center justify-between">
 
             <Text className="text-xl font-semibold text-white">
               Breakdown Services
